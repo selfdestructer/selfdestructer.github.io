@@ -1,0 +1,102 @@
+---
+description: NJ Coast — scenic locations finder for Cape May County
+globs: ["**/*.{js,jsx,css,json,yml,yaml,md}"]
+alwaysApply: true
+---
+
+# NJ Coast — Project Rules for Cursor
+
+## What this project is
+A scenic locations finder for **Cape May County, New Jersey**, deployed as a static site on GitHub Pages at **njcoast.me**. Users explore beaches, wildlife refuges, lighthouses, parks, and marshes on an interactive map powered by Google Maps, with an AI guide powered by Gemini 2.0 Flash.
+
+## Stack
+- **Vite 8 + React 19** — static site, no SSR
+- **React Router v7** — client-side routing (`/` → MapPage, `/about` → AboutPage)
+- **PostHog** — product analytics via `posthog-js/react` `PostHogProvider`
+- **Google Maps** — `@vis.gl/react-google-maps` with `AdvancedMarker` + `InfoWindow`
+- **Gemini AI** — `@google/generative-ai`, model `gemini-2.0-flash`, streaming chat
+- **Vertex AI Search** — Discovery Engine REST API (covered by GenAI App Builder credit)
+- **Doppler** — secrets management (`doppler run -- npm run dev` locally; `DOPPLER_TOKEN` in CI)
+
+## File layout
+```
+src/
+  services/
+    gemini.js          # Gemini 2.0 Flash wrapper (streamSceneryChat, generateLocationSpotlight)
+    vertexSearch.js    # Vertex AI Search REST wrapper (searchLocations, rankLocations)
+  data/
+    scenicLocations.js # 12 curated Cape May County locations + CATEGORIES constant
+    mapStyle.js        # COASTAL_MAP_STYLE — inline JSON fallback when no Map ID is set
+  components/
+    NavBar.jsx / .css
+    AiAssistant.jsx / .css  # Floating chat panel, Gemini-powered
+  pages/
+    MapPage.jsx / .css      # Main map view with sidebar + AI assistant
+    AboutPage.jsx / .css
+  App.jsx / .css            # Router, PostHog pageview tracking
+  main.jsx                  # PostHogProvider init, BrowserRouter
+  index.css                 # Design tokens (--navy, --ocean, --gold, --sand, --marsh)
+```
+
+## Secrets & env vars
+All secrets go through Doppler. The canonical reference is `.env.example`.
+Never hardcode keys. Always use `import.meta.env.VITE_*`.
+
+Key vars:
+- `VITE_POSTHOG_KEY` / `VITE_POSTHOG_HOST`
+- `VITE_GOOGLE_MAPS_API_KEY` — Maps JS API key, domain-restricted to njcoast.me
+- `VITE_GOOGLE_MAPS_MAP_ID` — Cloud Map ID for custom Cape May styling + AdvancedMarker
+- `VITE_GEMINI_API_KEY` — Gemini API key (Google AI Studio or Google Cloud)
+- `VITE_VERTEX_SEARCH_PROJECT_ID` / `VITE_VERTEX_SEARCH_LOCATION` / `VITE_VERTEX_SEARCH_DATA_STORE` / `VITE_VERTEX_SEARCH_API_KEY`
+
+## Design tokens (index.css)
+```
+--navy   #0b2e54   brand dark
+--ocean  #1a6fa8   brand blue / primary interactive
+--gold   #e8c87c   accent (navbar border, highlights)
+--sand   #f4a261   beach / warm category color
+--marsh  #52b788   wildlife / green category color
+```
+Dark mode is supported via `prefers-color-scheme: dark`.
+
+## Coding conventions
+- **Functional components only** — no class components
+- **useCallback** for all event handlers passed to children or used in effects
+- **PostHog capture** on every meaningful user interaction (category filter, location select, AI queries)
+- CSS is **component-scoped** plain CSS files (no CSS modules, no Tailwind)
+- No TypeScript — plain JSX/JS
+- No `console.log` in committed code
+- Graceful degradation: every service that needs an API key must render a helpful fallback UI when the key is missing
+
+## Google Maps custom style
+- `VITE_GOOGLE_MAPS_MAP_ID` → cloud-based styling (user creates in Cloud Console)
+- When not set, `COASTAL_MAP_STYLE` from `src/data/mapStyle.js` is used as inline styles
+- `mapTypeId` prop enables roadmap/satellite/hybrid/terrain switching
+- Custom style only applies in `roadmap` mode; satellite/hybrid show aerial imagery
+
+## Vertex AI Search — covered SKUs to use
+From the GenAI App Builder trial credit:
+| Feature | SKU ID |
+|---|---|
+| Standard Search API | BADA-EE26-7BDA |
+| Enterprise Search API | 93D6-7280-CF05 |
+| Advance Generative Answers | C232-DC00-D993 |
+| Grounded Generation | C42C-2852-B25D |
+| Web Grounded Generation | FBDD-D195-DEB5 |
+| Ranking | EE89-3EE8-2541 |
+| Data Index | BC7D-6A97-90F8 |
+| Vector Search Index Building | 8724-DA51-DA95 |
+| Dialogflow CX (text) | 2DA2-9861-0744 |
+
+## HTTPS / SSL
+GitHub Pages provisions a free Let's Encrypt certificate automatically for `njcoast.me`.
+Enable it: Repo Settings → Pages → check **Enforce HTTPS**.
+The `CNAME` file (`njcoast.me`) must stay in the repo root — it is copied to `dist/` at build time by Vite.
+
+## Build & dev commands
+```bash
+doppler run -- npm run dev    # local dev with secrets
+npm run build                 # production build
+npm run lint                  # ESLint
+npm run preview               # preview production build
+```

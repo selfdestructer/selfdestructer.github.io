@@ -13,6 +13,8 @@ import {
   COUNTY_CENTER,
   DEFAULT_ZOOM,
 } from '../data/scenicLocations'
+import { COASTAL_MAP_STYLE } from '../data/mapStyle'
+import AiAssistant from '../components/AiAssistant'
 import './MapPage.css'
 
 const CATEGORY_COLORS = {
@@ -27,7 +29,7 @@ export default function MapPage() {
   const posthog = usePostHog()
   const [activeCategory, setActiveCategory] = useState('all')
   const [selectedLocation, setSelectedLocation] = useState(null)
-  const [mapType, setMapType] = useState('hybrid')
+  const [mapType, setMapType] = useState('roadmap')
 
   const filteredLocations =
     activeCategory === 'all'
@@ -63,9 +65,26 @@ export default function MapPage() {
     [posthog],
   )
 
-  const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY
+  // When the AI mentions a location name, highlight it on the map
+  const handleLocationMention = useCallback(
+    (responseText) => {
+      const mentioned = SCENIC_LOCATIONS.find((loc) =>
+        responseText.toLowerCase().includes(loc.name.toLowerCase()),
+      )
+      if (mentioned && mentioned.id !== selectedLocation?.id) {
+        setSelectedLocation(mentioned)
+      }
+    },
+    [selectedLocation],
+  )
 
-  if (!apiKey) {
+  const mapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY
+  // Custom Map ID created in Google Cloud Console → Maps Platform → Map Management
+  // Required for AdvancedMarker and cloud-based custom styling.
+  // Falls back to inline COASTAL_MAP_STYLE when not set (development).
+  const mapId = import.meta.env.VITE_GOOGLE_MAPS_MAP_ID || undefined
+
+  if (!mapsApiKey) {
     return (
       <div className="map-page map-page--no-key">
         <div className="no-key-card">
@@ -133,20 +152,30 @@ export default function MapPage() {
               key={type}
               className={`map-type-btn${mapType === type ? ' active' : ''}`}
               onClick={() => handleMapTypeChange(type)}
+              title={
+                type === 'roadmap' && mapId
+                  ? 'Custom Cape May style'
+                  : type === 'roadmap'
+                    ? 'Coastal style (set Map ID for custom cloud style)'
+                    : undefined
+              }
             >
-              {type.charAt(0).toUpperCase() + type.slice(1)}
+              {type === 'roadmap' ? (mapId ? '🗺 Custom' : '🗺 Styled') : type.charAt(0).toUpperCase() + type.slice(1)}
             </button>
           ))}
         </div>
 
-        <APIProvider apiKey={apiKey}>
+        <APIProvider apiKey={mapsApiKey}>
           <Map
-            mapId="njcoast-scenic-map"
+            mapId={mapId}
             defaultCenter={COUNTY_CENTER}
             defaultZoom={DEFAULT_ZOOM}
             mapTypeId={mapType}
             gestureHandling="greedy"
             disableDefaultUI={false}
+            // Inline style fallback when no cloud Map ID is set.
+            // Note: styles are ignored when mapId is set (cloud styling takes over).
+            styles={mapId ? undefined : mapType === 'roadmap' ? COASTAL_MAP_STYLE : undefined}
             style={{ width: '100%', height: '100%' }}
           >
             {filteredLocations.map((loc) => (
@@ -188,6 +217,8 @@ export default function MapPage() {
             )}
           </Map>
         </APIProvider>
+
+        <AiAssistant onLocationMention={handleLocationMention} />
       </div>
     </div>
   )

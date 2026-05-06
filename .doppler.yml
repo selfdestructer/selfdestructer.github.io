@@ -1,0 +1,18 @@
+# Doppler project configuration
+# https://docs.doppler.com/docs/cli-config-file
+#
+# Project name: njcoast
+# Configs:
+#   dev  — local development (maps to .env.local values)
+#   prd  — production build (GitHub Actions uses this via DOPPLER_TOKEN secret)
+#
+# Setup steps:
+#   1. doppler login
+#   2. doppler setup        (select project: njcoast, config: dev)
+#   3. doppler run -- npm run dev
+#
+# All secrets are managed at https://dashboard.doppler.com/workplace/projects/njcoast
+
+setup:
+  project: njcoast
+  config: dev

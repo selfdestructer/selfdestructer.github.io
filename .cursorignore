@@ -1,0 +1,25 @@
+# Cursor ignore — files excluded from Cursor's codebase indexing.
+# Keep this lean: only exclude generated artifacts, secrets, and noise.
+
+# Build output & caches
+dist/
+dist-ssr/
+.vite/
+node_modules/
+
+# Secrets & local env (never index these)
+.env
+.env.*
+!.env.example
+
+# Doppler
+.doppler.yml
+
+# OS & editor artifacts
+.DS_Store
+*.suo
+*.sw?
+*.log
+
+# Git internals
+.git/
