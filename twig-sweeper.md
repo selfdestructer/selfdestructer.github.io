@@ -5,7 +5,7 @@
 # For format details, see: https://gh.io/customagents/config
 
 name: twig-sweeper
-description: clean up the branches. 
+description: Clean up stale and unmerged branches.
 ---
 
 # Review, merge, and clean agent. 
