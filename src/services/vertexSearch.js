@@ -4,7 +4,7 @@
  * Covered SKUs from the GenAI App Builder trial credit:
  *   - Vertex AI Search: Standard Search API Request Count  (BADA-EE26-7BDA)
  *   - Vertex AI Search: Enterprise Search API Request Count (93D6-7280-CF05)
- *   - Vertex AI Search: Advance Generative Answers Request Count (C232-DC00-D993)
+ *   - Vertex AI Search: Advanced Generative Answers Request Count (C232-DC00-D993)
  *   - Vertex AI Search: Grounded Generation (C42C-2852-B25D)
  *   - Vertex AI Search: Web Grounded Generation (FBDD-D195-DEB5)
  *   - Vertex AI Search: Ranking (EE89-3EE8-2541)

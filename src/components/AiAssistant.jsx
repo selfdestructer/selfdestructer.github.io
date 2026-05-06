@@ -7,7 +7,7 @@ import './AiAssistant.css'
 const SUGGESTED_PROMPTS = [
   'Best spot to watch the sunset?',
   'Where can I see migrating birds?',
-  'Hidden beach that\'s not crowded?',
+  'Hidden beach that\u2019s not crowded?',
   'Good lighthouse to visit with kids?',
   'Where do herons and egrets nest?',
 ]

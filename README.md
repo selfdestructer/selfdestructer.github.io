@@ -91,7 +91,7 @@ The app uses the **GenAI App Builder trial credit** for these Discovery Engine S
 | Feature | SKU ID | Used for |
 |---|---|---|
 | Standard Search API | `BADA-EE26-7BDA` | Location search queries |
-| Advance Generative Answers | `C232-DC00-D993` | AI summary of search results |
+| Advanced Generative Answers | `C232-DC00-D993` | AI summary of search results |
 | Grounded Generation | `C42C-2852-B25D` | Grounded location answers |
 | Web Grounded Generation | `FBDD-D195-DEB5` | Web-aware location info |
 | Ranking | `EE89-3EE8-2541` | Reranking location results |
