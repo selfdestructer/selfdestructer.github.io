@@ -1,0 +1,250 @@
+.map-page {
+  display: flex;
+  flex: 1;
+  height: calc(100vh - 63px); /* full height minus navbar */
+  overflow: hidden;
+}
+
+/* ── Sidebar ── */
+.sidebar {
+  width: 320px;
+  flex-shrink: 0;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.sidebar-header {
+  padding: 20px 20px 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.sidebar-header h1 {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-h);
+  margin: 0 0 2px;
+}
+
+.sidebar-subtitle {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* ── Category filters ── */
+.category-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.category-btn {
+  font-size: 12px;
+  padding: 5px 10px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  white-space: nowrap;
+}
+
+.category-btn:hover {
+  border-color: var(--ocean);
+  color: var(--ocean);
+}
+
+.category-btn.active {
+  background: var(--ocean);
+  color: #fff;
+  border-color: var(--ocean);
+}
+
+/* ── Location list ── */
+.location-list {
+  list-style: none;
+  margin: 0;
+  padding: 8px 0;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.location-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: background 0.12s;
+  border-left: 3px solid transparent;
+}
+
+.location-item:hover {
+  background: var(--surface-hover);
+}
+
+.location-item.selected {
+  background: var(--surface-selected);
+  border-left-color: var(--ocean);
+}
+
+.location-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 5px;
+}
+
+.location-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.location-text strong {
+  font-size: 14px;
+  color: var(--text-h);
+  line-height: 1.3;
+}
+
+.location-tags {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: lowercase;
+}
+
+/* ── Map container ── */
+.map-container {
+  flex: 1;
+  position: relative;
+}
+
+/* ── Map type switcher ── */
+.map-type-switcher {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 10;
+  display: flex;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 8px;
+  padding: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.map-type-btn {
+  font-size: 12px;
+  font-weight: 500;
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: none;
+  background: transparent;
+  color: #444;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.map-type-btn:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.map-type-btn.active {
+  background: var(--ocean);
+  color: #fff;
+}
+
+/* ── Info window ── */
+.info-window {
+  max-width: 260px;
+  font-family: inherit;
+}
+
+.info-window h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--navy);
+  margin: 0 0 6px;
+}
+
+.info-window p {
+  font-size: 13px;
+  color: #444;
+  line-height: 1.5;
+  margin: 0 0 10px;
+}
+
+.info-window-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.info-tag {
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 10px;
+  background: #e8f4f8;
+  color: var(--ocean);
+}
+
+/* ── No API key fallback ── */
+.map-page--no-key {
+  justify-content: center;
+  align-items: center;
+  background: var(--bg);
+}
+
+.no-key-card {
+  text-align: center;
+  padding: 40px;
+  max-width: 480px;
+}
+
+.no-key-icon {
+  font-size: 48px;
+}
+
+.no-key-card h2 {
+  font-size: 22px;
+  color: var(--navy);
+  margin: 16px 0 8px;
+}
+
+.no-key-card p {
+  color: var(--text-muted);
+  margin: 0 0 16px;
+}
+
+.no-key-card pre {
+  background: var(--code-bg);
+  border-radius: 6px;
+  padding: 12px 16px;
+  font-size: 13px;
+  text-align: left;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .map-page {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .sidebar {
+    width: 100%;
+    height: auto;
+    max-height: 40vh;
+  }
+
+  .map-container {
+    height: 60vh;
+  }
+}

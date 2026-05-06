@@ -1,0 +1,90 @@
+/* ── NJ Coast Design Tokens ── */
+:root {
+  /* Brand palette */
+  --navy:   #0b2e54;
+  --ocean:  #1a6fa8;
+  --sand:   #f4a261;
+  --gold:   #e8c87c;
+  --marsh:  #52b788;
+
+  /* Neutrals */
+  --text:        #4b5563;
+  --text-h:      #111827;
+  --text-muted:  #9ca3af;
+  --bg:          #f8fafc;
+  --surface:     #ffffff;
+  --surface-hover:    rgba(26, 111, 168, 0.05);
+  --surface-selected: rgba(26, 111, 168, 0.08);
+  --border:      #e5e7eb;
+  --code-bg:     #f1f5f9;
+
+  /* Typography */
+  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --mono: ui-monospace, Consolas, monospace;
+
+  font: 16px/160% var(--sans);
+  color: var(--text);
+  background: var(--bg);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --navy:   #93c5fd;
+    --ocean:  #60a5fa;
+    --text:        #9ca3af;
+    --text-h:      #f3f4f6;
+    --text-muted:  #6b7280;
+    --bg:          #0f172a;
+    --surface:     #1e293b;
+    --surface-hover:    rgba(96, 165, 250, 0.06);
+    --surface-selected: rgba(96, 165, 250, 0.12);
+    --border:      #334155;
+    --code-bg:     #1e293b;
+  }
+}
+
+/* ── Reset ── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+}
+
+#root {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
+
+h1, h2, h3 {
+  font-family: var(--sans);
+  font-weight: 700;
+  color: var(--text-h);
+  margin: 0;
+}
+
+p {
+  margin: 0;
+}
+
+code {
+  font-family: var(--mono);
+  font-size: 13px;
+  background: var(--code-bg);
+  border-radius: 4px;
+  padding: 2px 6px;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
