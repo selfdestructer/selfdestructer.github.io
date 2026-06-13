@@ -33,18 +33,19 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build (secrets injected by Doppler)
-        # Doppler fetches all secrets from the njcoast project (prd config)
-        # and injects them as environment variables for the build step.
-        # Add secrets in Doppler dashboard: https://dashboard.doppler.com
-        # Required secrets: VITE_POSTHOG_KEY, VITE_POSTHOG_HOST,
-        #   VITE_GOOGLE_MAPS_API_KEY, VITE_GOOGLE_MAPS_MAP_ID,
-        #   VITE_GEMINI_API_KEY, VITE_VERTEX_SEARCH_PROJECT_ID,
-        #   VITE_VERTEX_SEARCH_LOCATION, VITE_VERTEX_SEARCH_DATA_STORE,
-        #   VITE_VERTEX_SEARCH_API_KEY
-        run: doppler run --project njcoast --config prd -- npm run build
+      - name: Build
+        # When DOPPLER_TOKEN is set, inject production secrets from Doppler (prd config).
+        # Without it, build still succeeds — the app degrades gracefully (map fallback UI, etc.).
+        # Add DOPPLER_TOKEN in repo Settings → Secrets → Actions for full API features.
         env:
           DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN }}
+        run: |
+          if [ -n "$DOPPLER_TOKEN" ]; then
+            doppler run --project njcoast --config prd -- npm run build
+          else
+            echo "DOPPLER_TOKEN not set — building without API keys (fallback UI mode)"
+            npm run build
+          fi
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
